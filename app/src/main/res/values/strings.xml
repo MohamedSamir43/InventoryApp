@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Inventory App</string>
+    <string name="retriveFromDbBtnStr">Retrive Record</string>
+    <string name="insertToDbBtnStr">InsertToDb</string>
+</resources>
