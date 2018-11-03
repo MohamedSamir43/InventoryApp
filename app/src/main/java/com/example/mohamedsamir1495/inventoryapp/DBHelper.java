@@ -48,16 +48,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 String productId = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_ID));
                 String productName = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_NAME));
                 String productPrice = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_PRICE));
-                String productQuantity = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_QUANTITY));
+                int productQuantity = returnedQueryData.getInt(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_QUANTITY));
 
                 String productSupplierName = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_SUPPLIER_NAME));
                 String productSupplierPhone = returnedQueryData.getString(returnedQueryData.getColumnIndex(DBContract.ProductTable.PRODUCT_SUPPLIER_PHONE));
-                retrievedInfo.add(new Product(productId, productName, productPrice, Integer.parseInt(productQuantity), new Product.Supplier(productSupplierName, productSupplierPhone)));
+                retrievedInfo.add(new Product(productId, productName, productPrice, productQuantity, new Product.Supplier(productSupplierName, productSupplierPhone)));
 
                 returnedQueryData.moveToNext();
 
             }
         }
+        returnedQueryData.close();
         return retrievedInfo;
     }
 

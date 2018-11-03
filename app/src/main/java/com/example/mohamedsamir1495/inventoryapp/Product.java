@@ -40,33 +40,17 @@ public class Product {
         return mProductName;
     }
 
-    public void setProductName(String productName) {
-        mProductName = productName;
-    }
-
     public String getProductPrice() {
         return mProductPrice;
 
-    }
-
-    public void setProductPrice(String productPrice) {
-        mProductPrice = productPrice;
     }
 
     public int getProductQuantitiy() {
         return mProductQuantitiy;
     }
 
-    public void setProductQuantitiy(int productQuantitiy) {
-        mProductQuantitiy = productQuantitiy;
-    }
-
     public Supplier getProductSupplier() {
         return mProductSupplier;
-    }
-
-    public void setProductSupplier(Supplier productSupplier) {
-        mProductSupplier = productSupplier;
     }
 
     public String getProductId() {
@@ -85,16 +69,8 @@ public class Product {
             return mSupplierName;
         }
 
-        public void setSupplierName(String supplierName) {
-            mSupplierName = supplierName;
-        }
-
         public String getSupplierPhone() {
             return mSupplierPhone;
-        }
-
-        public void setSupplierPhone(String supplierPhone) {
-            mSupplierPhone = supplierPhone;
         }
 
     }

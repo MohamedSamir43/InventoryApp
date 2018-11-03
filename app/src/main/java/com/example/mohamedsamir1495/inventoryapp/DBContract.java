@@ -6,6 +6,7 @@ public class DBContract {
     public static final int DB_VERSION = 1;
     public static final String DB_NAME = "UDACITY_DB.db";
     private static final String TEXT_TYPE = " TEXT";
+    private  static  final String INTEGER_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
 
     private DBContract() {
@@ -24,7 +25,7 @@ public class DBContract {
                 PRODUCT_ID + " " + TEXT_TYPE + " PRIMARY KEY," +
                 PRODUCT_NAME + TEXT_TYPE + COMMA_SEP +
                 PRODUCT_PRICE + TEXT_TYPE + COMMA_SEP +
-                PRODUCT_QUANTITY + TEXT_TYPE + COMMA_SEP +
+                PRODUCT_QUANTITY + INTEGER_TYPE + COMMA_SEP +
                 PRODUCT_SUPPLIER_NAME + TEXT_TYPE + COMMA_SEP +
                 PRODUCT_SUPPLIER_PHONE + TEXT_TYPE + " )";
         public static final String DROP_PRODUCT_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
