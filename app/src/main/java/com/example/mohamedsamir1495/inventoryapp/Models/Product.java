@@ -1,4 +1,4 @@
-package com.example.mohamedsamir1495.inventoryapp;
+package com.example.mohamedsamir1495.inventoryapp.Models;
 
 import java.util.UUID;
 
