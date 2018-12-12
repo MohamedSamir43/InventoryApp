@@ -14,9 +14,11 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
+import com.example.mohamedsamir1495.inventoryapp.EditorActivity;
 import com.example.mohamedsamir1495.inventoryapp.MainActivity;
+import com.example.mohamedsamir1495.inventoryapp.R;
 
-/
+
 
 public class InventoryCursorAdapter extends CursorAdapter {
 
@@ -69,7 +71,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), EditorActivity.class);
-                Uri currentProdcuttUri = ContentUris.withAppendedId(MainActivity.CONTENT_URI, Long.parseLong(productID));
+                Uri currentProdcuttUri = ContentUris.withAppendedId(ProductTable.CONTENT_URI, Long.parseLong(productID));
                 intent.setData(currentProdcuttUri);
                 context.startActivity(intent);
             }

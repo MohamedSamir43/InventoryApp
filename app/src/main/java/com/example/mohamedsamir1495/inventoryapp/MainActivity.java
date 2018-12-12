@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, final long id) {
-                Intent intent = new Intent(MainActivity.this, ViewActivity.class);
-                Uri currentProdcuttUri = ContentUris.withAppendedId(pro.CONTENT_URI, id);
+                Intent intent = new Intent(MainActivity.this, ProductViewActivity.class);
+                Uri currentProdcuttUri = ContentUris.withAppendedId(ProductTable.CONTENT_URI, id);
                 intent.setData(currentProdcuttUri);
                 startActivity(intent);
             }
