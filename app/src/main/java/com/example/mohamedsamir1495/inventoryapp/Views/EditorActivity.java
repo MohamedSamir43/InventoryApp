@@ -1,4 +1,4 @@
-package com.example.mohamedsamir1495.inventoryapp;
+package com.example.mohamedsamir1495.inventoryapp.Views;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,29 +24,40 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
+import com.example.mohamedsamir1495.inventoryapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXISTING_INVENTORY_LOADER = 0;
-    private Uri mCurrentProductUri;
+    private Uri currentProductUri;
 
-    private EditText mProductNameEditText;
-    private EditText mProductPriceEditText;
-    private EditText mProductQuantityEditText;
-    private Spinner mProductSupplieNameSpinner;
-    private EditText mProductSupplierPhoneNumberEditText;
+    @BindView(R.id.product_name_edit_text)
+    EditText productNameEditText;
 
-    private int mSupplieName = ProductTable.SUPPLIER_UNKNOWN;
+    @BindView(R.id.product_price_edit_text)
+    EditText productPriceEditText;
 
-    private boolean mProductHasChanged = false;
+    @BindView(R.id.product_quantity_edit_text)
+    EditText productQuantityEditText;
+
+    @BindView(R.id.product_supplier_name_spinner)
+    Spinner  productSupplieNameSpinner;
+
+    @BindView(R.id.product_supplier_phone_number_edit_text)
+    EditText productSupplierPhoneNumberEditText;
+
+    private int supplierName = ProductTable.SUPPLIER_UNKNOWN;
+
+    private boolean productHasChanged = false;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            mProductHasChanged = true;
-            Log.d("message", "onTouch");
+            productHasChanged = true;
 
             return false;
         }
@@ -57,13 +67,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-
-        Log.d("message", "onCreate");
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        mCurrentProductUri = intent.getData();
+        currentProductUri = intent.getData();
 
-        if (mCurrentProductUri == null) {
+        if (currentProductUri == null) {
             setTitle(getString(R.string.add_product));
             invalidateOptionsMenu();
         } else {
@@ -71,17 +80,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             getLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
         }
 
-        mProductNameEditText = findViewById(R.id.product_name_edit_text);
-        mProductPriceEditText = findViewById(R.id.product_price_edit_text);
-        mProductQuantityEditText = findViewById(R.id.product_quantity_edit_text);
-        mProductSupplieNameSpinner = findViewById(R.id.product_supplier_name_spinner);
-        mProductSupplierPhoneNumberEditText = findViewById(R.id.product_supplier_phone_number_edit_text);
 
-        mProductNameEditText.setOnTouchListener(mTouchListener);
-        mProductPriceEditText.setOnTouchListener(mTouchListener);
-        mProductQuantityEditText.setOnTouchListener(mTouchListener);
-        mProductSupplieNameSpinner.setOnTouchListener(mTouchListener);
-        mProductSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
+        productNameEditText.setOnTouchListener(mTouchListener);
+        productPriceEditText.setOnTouchListener(mTouchListener);
+        productQuantityEditText.setOnTouchListener(mTouchListener);
+        productSupplieNameSpinner.setOnTouchListener(mTouchListener);
+        productSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
 
         setupSpinner();
     }
@@ -92,39 +96,39 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         productSupplieNameSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-        mProductSupplieNameSpinner.setAdapter(productSupplieNameSpinnerAdapter);
+        productSupplieNameSpinner.setAdapter(productSupplieNameSpinnerAdapter);
 
-        mProductSupplieNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        productSupplieNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.supplier_amazon))) {
-                        mSupplieName = ProductTable.SUPPLIER_AMAZON;
-                    } else if (selection.equals(getString(R.string.supplier_jarirr))) {
-                        mSupplieName = ProductTable.SUPPLIER_JARIRR;
-                    } else if (selection.equals(getString(R.string.supplier_obeikan))) {
-                        mSupplieName = ProductTable.SUPPLIER_OBEIKAN;
+                        supplierName = ProductTable.SUPPLIER_AMAZON;
+                    } else if (selection.equals(getString(R.string.supplier_jumia))) {
+                        supplierName = ProductTable.SUPPLIER_JUMIA;
+                    } else if (selection.equals(getString(R.string.supplier_souq))) {
+                        supplierName = ProductTable.SUPPLIER_SOUQ;
                     } else {
-                        mSupplieName = ProductTable.SUPPLIER_UNKNOWN;
+                        supplierName = ProductTable.SUPPLIER_UNKNOWN;
                     }
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mSupplieName = ProductTable.SUPPLIER_UNKNOWN;
+                supplierName = ProductTable.SUPPLIER_UNKNOWN;
             }
         });
     }
 
 
     private void saveProduct() {
-        String productNameString = mProductNameEditText.getText().toString().trim();
-        String productPriceString = mProductPriceEditText.getText().toString().trim();
-        String productQuantityString = mProductQuantityEditText.getText().toString().trim();
-        String productSupplierPhoneNumberString = mProductSupplierPhoneNumberEditText.getText().toString().trim();
-        if (mCurrentProductUri == null) {
+        String productNameString = productNameEditText.getText().toString().trim();
+        String productPriceString = productPriceEditText.getText().toString().trim();
+        String productQuantityString = productQuantityEditText.getText().toString().trim();
+        String productSupplierPhoneNumberString = productSupplierPhoneNumberEditText.getText().toString().trim();
+        if (currentProductUri == null) {
             if (TextUtils.isEmpty(productNameString)) {
                 Toast.makeText(this, getString(R.string.product_name_requires), Toast.LENGTH_SHORT).show();
                 return;
@@ -137,7 +141,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.quantity_requires), Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (mSupplieName == ProductTable.SUPPLIER_UNKNOWN) {
+            if (supplierName == ProductTable.SUPPLIER_UNKNOWN) {
                 Toast.makeText(this, getString(R.string.supplier_name_requires), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -151,7 +155,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             values.put(ProductTable.PRODUCT_NAME, productNameString);
             values.put(ProductTable.PRODUCT_PRICE, productPriceString);
             values.put(ProductTable.PRODUCT_QUANTITY, productQuantityString);
-            values.put(ProductTable.PRODUCT_SUPPLIER_NAME, mSupplieName);
+            values.put(ProductTable.PRODUCT_SUPPLIER_NAME, supplierName);
             values.put(ProductTable.PRODUCT_SUPPLIER_PHONE, productSupplierPhoneNumberString);
 
             Uri newUri = getContentResolver().insert(ProductTable.CONTENT_URI, values);
@@ -178,7 +182,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.quantity_requires), Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (mSupplieName == ProductTable.SUPPLIER_UNKNOWN) {
+            if (supplierName == ProductTable.SUPPLIER_UNKNOWN) {
                 Toast.makeText(this, getString(R.string.supplier_name_requires), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -192,11 +196,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             values.put(ProductTable.PRODUCT_NAME, productNameString);
             values.put(ProductTable.PRODUCT_PRICE, productPriceString);
             values.put(ProductTable.PRODUCT_QUANTITY, productQuantityString);
-            values.put(ProductTable.PRODUCT_SUPPLIER_NAME, mSupplieName);
+            values.put(ProductTable.PRODUCT_SUPPLIER_NAME, supplierName);
             values.put(ProductTable.PRODUCT_SUPPLIER_PHONE, productSupplierPhoneNumberString);
 
 
-            int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
+            int rowsAffected = getContentResolver().update(currentProductUri, values, null, null);
             if (rowsAffected == 0) {
                 Toast.makeText(this, getString(R.string.update_failed),
                         Toast.LENGTH_SHORT).show();
@@ -212,7 +216,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
-        Log.d("message", "open Editor Activity");
         return true;
     }
 
@@ -223,7 +226,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 saveProduct();
                 return true;
             case android.R.id.home:
-                if (!mProductHasChanged) {
+                if (!productHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
                 }
@@ -242,7 +245,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onBackPressed() {
-        if (!mProductHasChanged) {
+        if (!productHasChanged) {
             super.onBackPressed();
             return;
         }
@@ -268,7 +271,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 ProductTable.PRODUCT_SUPPLIER_PHONE
         };
         return new CursorLoader(this,
-                mCurrentProductUri,
+                currentProductUri,
                 projection,
                 null,
                 null,
@@ -293,23 +296,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int currentSupplierName = cursor.getInt(supplierNameColumnIndex);
             int currentSupplierPhone = cursor.getInt(supplierPhoneColumnIndex);
 
-            mProductNameEditText.setText(currentName);
-            mProductPriceEditText.setText(Integer.toString(currentPrice));
-            mProductQuantityEditText.setText(Integer.toString(currentQuantity));
-            mProductSupplierPhoneNumberEditText.setText(Integer.toString(currentSupplierPhone));
+            productNameEditText.setText(currentName);
+            productPriceEditText.setText(Integer.toString(currentPrice));
+            productQuantityEditText.setText(Integer.toString(currentQuantity));
+            productSupplierPhoneNumberEditText.setText(Integer.toString(currentSupplierPhone));
 
             switch (currentSupplierName) {
                 case ProductTable.SUPPLIER_AMAZON:
-                    mProductSupplieNameSpinner.setSelection(1);
+                    productSupplieNameSpinner.setSelection(1);
                     break;
-                case ProductTable.SUPPLIER_JARIRR:
-                    mProductSupplieNameSpinner.setSelection(2);
+                case ProductTable.SUPPLIER_JUMIA:
+                    productSupplieNameSpinner.setSelection(2);
                     break;
-                case ProductTable.SUPPLIER_OBEIKAN:
-                    mProductSupplieNameSpinner.setSelection(3);
+                case ProductTable.SUPPLIER_SOUQ:
+                    productSupplieNameSpinner.setSelection(3);
                     break;
                 default:
-                    mProductSupplieNameSpinner.setSelection(0);
+                    productSupplieNameSpinner.setSelection(0);
                     break;
             }
         }
@@ -317,11 +320,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mProductNameEditText.setText("");
-        mProductPriceEditText.setText("");
-        mProductQuantityEditText.setText("");
-        mProductSupplierPhoneNumberEditText.setText("");
-        mProductSupplieNameSpinner.setSelection(0);
+        productNameEditText.setText("");
+        productPriceEditText.setText("");
+        productQuantityEditText.setText("");
+        productSupplierPhoneNumberEditText.setText("");
+        productSupplieNameSpinner.setSelection(0);
     }
 
     private void showUnsavedChangesDialog(

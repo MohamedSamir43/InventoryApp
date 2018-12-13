@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.mohamedsamir1495.inventoryapp.Database.DBContract;
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
 
 

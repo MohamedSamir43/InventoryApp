@@ -11,26 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditorActivity"
+        <activity android:name=".Views.EditorActivity"
             android:label="@string/edit_product"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".Views.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".Views.MainActivity" />
         </activity>
-        <activity android:name=".ProductViewActivity"
+        <activity android:name=".Views.ProductViewActivity"
             android:label="@string/product_view"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".Views.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".Views.MainActivity" />
         </activity>
         <provider
             android:name=".Database.InventoryProvider"

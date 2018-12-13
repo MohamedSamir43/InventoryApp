@@ -41,11 +41,11 @@ public class DBContract {
         // SUPPLIER_NAME LIST VALUES
         public final static int SUPPLIER_UNKNOWN = 0;
         public final static int SUPPLIER_AMAZON = 1;
-        public final static int SUPPLIER_JARIRR = 2;
-        public final static int SUPPLIER_OBEIKAN = 3;
+        public final static int SUPPLIER_JUMIA = 2;
+        public final static int SUPPLIER_SOUQ = 3;
 
         public static boolean isValidSupplierName(int suppliername) {
-            if (suppliername == SUPPLIER_UNKNOWN || suppliername == SUPPLIER_AMAZON || suppliername == SUPPLIER_JARIRR || suppliername == SUPPLIER_OBEIKAN) {
+            if (suppliername == SUPPLIER_UNKNOWN || suppliername == SUPPLIER_AMAZON || suppliername == SUPPLIER_JUMIA || suppliername == SUPPLIER_SOUQ) {
                 return true;
             }
             return false;

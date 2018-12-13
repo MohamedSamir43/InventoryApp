@@ -1,15 +1,11 @@
 package com.example.mohamedsamir1495.inventoryapp.Database;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.mohamedsamir1495.inventoryapp.Models.Product;
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class DBHelper extends SQLiteOpenHelper {

@@ -1,4 +1,4 @@
-package com.example.mohamedsamir1495.inventoryapp;
+package com.example.mohamedsamir1495.inventoryapp.Views;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -11,45 +11,59 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
+import com.example.mohamedsamir1495.inventoryapp.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ProductViewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXISTING_INVENTORY_LOADER = 0;
-    private Uri mCurrentProductUri;
+    private Uri currentProductUri;
 
-    private TextView mProductNameViewText;
-    private TextView mProductPriceViewText;
-    private TextView mProductQuantityViewText;
-    private TextView mProductSupplieNameSpinner;
-    private TextView mProductSupplierPhoneNumberViewText;
+    @BindView(R.id.product_name_view_text)
+    TextView productNameViewText;
+
+    @BindView(R.id.product_price_view_text)
+    TextView productPriceViewText;
+
+    @BindView(R.id.product_quantity_view_text)
+    TextView productQuantityViewText;
+
+    @BindView(R.id.product_supplier_name_view_text)
+    TextView productSupplierNameSpinner;
+
+    @BindView(R.id.product_supplier_phone_number_view_text)
+    TextView productSupplierPhoneNumberViewText;
+
+    @BindView(R.id.decrease_button)
+    Button productDecreaseButton;
+
+    @BindView(R.id.increase_button)
+    Button productIncreaseButton;
+
+    @BindView(R.id.delete_button)
+    Button productDeleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
-
-        mProductNameViewText = findViewById(R.id.product_name_view_text);
-        mProductPriceViewText = findViewById(R.id.product_price_view_text);
-        mProductQuantityViewText = findViewById(R.id.product_quantity_view_text);
-        mProductSupplieNameSpinner = findViewById(R.id.product_supplier_name_view_text);
-        mProductSupplierPhoneNumberViewText = findViewById(R.id.product_supplier_phone_number_view_text);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        mCurrentProductUri = intent.getData();
-        if (mCurrentProductUri == null) {
+        currentProductUri = intent.getData();
+        if (currentProductUri == null) {
             invalidateOptionsMenu();
         } else {
             getLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
         }
-
-        Log.d("message", "onCreate ViewActivity");
 
     }
 
@@ -64,7 +78,7 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
                 ProductTable.PRODUCT_SUPPLIER_PHONE
         };
         return new CursorLoader(this,
-                mCurrentProductUri,
+                currentProductUri,
                 projection,
                 null,
                 null,
@@ -91,28 +105,27 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
             int currentSupplierName = cursor.getInt(supplierNameColumnIndex);
             final int currentSupplierPhone = cursor.getInt(supplierPhoneColumnIndex);
 
-            mProductNameViewText.setText(currentName);
-            mProductPriceViewText.setText(Integer.toString(currentPrice));
-            mProductQuantityViewText.setText(Integer.toString(currentQuantity));
-            mProductSupplierPhoneNumberViewText.setText(Integer.toString(currentSupplierPhone));
+            productNameViewText.setText(currentName);
+            productPriceViewText.setText(Integer.toString(currentPrice));
+            productQuantityViewText.setText(Integer.toString(currentQuantity));
+            productSupplierPhoneNumberViewText.setText(Integer.toString(currentSupplierPhone));
 
 
             switch (currentSupplierName) {
                 case ProductTable.SUPPLIER_AMAZON:
-                    mProductSupplieNameSpinner.setText(getText(R.string.supplier_amazon));
+                    productSupplierNameSpinner.setText(getText(R.string.supplier_amazon));
                     break;
-                case ProductTable.SUPPLIER_JARIRR:
-                    mProductSupplieNameSpinner.setText(getText(R.string.supplier_jarirr));
+                case ProductTable.SUPPLIER_JUMIA:
+                    productSupplierNameSpinner.setText(getText(R.string.supplier_jumia));
                     break;
-                case ProductTable.SUPPLIER_OBEIKAN:
-                    mProductSupplieNameSpinner.setText(getText(R.string.supplier_obeikan));
+                case ProductTable.SUPPLIER_SOUQ:
+                    productSupplierNameSpinner.setText(getText(R.string.supplier_souq));
                     break;
                 default:
-                    mProductSupplieNameSpinner.setText(getText(R.string.supplier_unknown));
+                    productSupplierNameSpinner.setText(getText(R.string.supplier_unknown));
                     break;
             }
 
-            Button productDecreaseButton = findViewById(R.id.decrease_button);
             productDecreaseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,7 +133,6 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
                 }
             });
 
-            Button productIncreaseButton = findViewById(R.id.increase_button);
             productIncreaseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,7 +140,6 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
                 }
             });
 
-            Button productDeleteButton = findViewById(R.id.delete_button);
             productDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -160,7 +171,6 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
             updateProduct(productQuantity);
             Toast.makeText(this, getString(R.string.quantity_change_msg), Toast.LENGTH_SHORT).show();
 
-            Log.d("Log msg", " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
         } else {
             Toast.makeText(this, getString(R.string.quantity_finish_msg), Toast.LENGTH_SHORT).show();
         }
@@ -172,21 +182,19 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
             updateProduct(productQuantity);
             Toast.makeText(this, getString(R.string.quantity_change_msg), Toast.LENGTH_SHORT).show();
 
-            Log.d("Log msg", " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
         }
     }
 
 
     private void updateProduct(int productQuantity) {
-        Log.d("message", "updateProduct at ViewActivity");
 
-        if (mCurrentProductUri == null) {
+        if (currentProductUri == null) {
             return;
         }
         ContentValues values = new ContentValues();
         values.put(ProductTable.PRODUCT_QUANTITY, productQuantity);
 
-        if (mCurrentProductUri == null) {
+        if (currentProductUri == null) {
             Uri newUri = getContentResolver().insert(ProductTable.CONTENT_URI, values);
             if (newUri == null) {
                 Toast.makeText(this, getString(R.string.insert_failed),
@@ -196,7 +204,7 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
+            int rowsAffected = getContentResolver().update(currentProductUri, values, null, null);
             if (rowsAffected == 0) {
                 Toast.makeText(this, getString(R.string.update_failed),
                         Toast.LENGTH_SHORT).show();
@@ -208,8 +216,8 @@ public class ProductViewActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void deleteProduct() {
-        if (mCurrentProductUri != null) {
-            int rowsDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
+        if (currentProductUri != null) {
+            int rowsDeleted = getContentResolver().delete(currentProductUri, null, null);
             if (rowsDeleted == 0) {
                 Toast.makeText(this, getString(R.string.delete_product_failed),
                         Toast.LENGTH_SHORT).show();

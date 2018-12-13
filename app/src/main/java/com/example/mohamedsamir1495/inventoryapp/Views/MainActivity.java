@@ -1,4 +1,4 @@
-package com.example.mohamedsamir1495.inventoryapp;
+package com.example.mohamedsamir1495.inventoryapp.Views;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,20 +26,30 @@ import butterknife.ButterKnife;
 
 import com.example.mohamedsamir1495.inventoryapp.Adapters.InventoryCursorAdapter;
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
+import com.example.mohamedsamir1495.inventoryapp.R;
 
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int INVENTORY_LOADER = 0;
 
-    InventoryCursorAdapter mCursorAdapter;
+    InventoryCursorAdapter cursorAdapter;
+
+    @BindView(R.id.list)
+    ListView inventoryListView;
+
+    @BindView(R.id.empty_text_view)
+    TextView emptyView;
+
+    @BindView(R.id.addItemButton)
+    FloatingActionButton addItemButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        FloatingActionButton plus = findViewById(R.id.plus);
-        plus.setOnClickListener(new View.OnClickListener() {
+        addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
@@ -48,13 +57,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        ListView inventoryListView = findViewById(R.id.list);
-
-        TextView emptyView = findViewById(R.id.empty_text_view);
         inventoryListView.setEmptyView(emptyView);
 
-        mCursorAdapter = new InventoryCursorAdapter(this, null);
-        inventoryListView.setAdapter(mCursorAdapter);
+        cursorAdapter = new InventoryCursorAdapter(this, null);
+        inventoryListView.setAdapter(cursorAdapter);
 
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Uri updateUri = ContentUris.withAppendedId(ProductTable.CONTENT_URI, productID);
             int rowsAffected = getContentResolver().update(updateUri, values, null, null);
             Toast.makeText(this, "Quantity was change", Toast.LENGTH_SHORT).show();
-
-            Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
         } else {
             Toast.makeText(this, "Product was finish :( , buy another Product", Toast.LENGTH_SHORT).show();
         }
@@ -106,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mCursorAdapter.swapCursor(cursor);
+        cursorAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+        cursorAdapter.swapCursor(null);
     }
 
     private void deleteAllProducts() {

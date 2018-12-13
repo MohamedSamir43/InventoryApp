@@ -4,7 +4,7 @@
         <string-array name="array_supplier_options">
             <item>@string/supplier_unknown</item>
             <item>@string/supplier_amazon</item>
-            <item>@string/supplier_jarirr</item>
-            <item>@string/supplier_obeikan</item>
+            <item>@string/supplier_jumia</item>
+            <item>@string/supplier_souq</item>
         </string-array>
 </resources>

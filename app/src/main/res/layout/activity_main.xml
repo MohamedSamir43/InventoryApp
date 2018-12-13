@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mohamedsamir1495.inventoryapp.MainActivity">
+    tools:context="com.example.mohamedsamir1495.inventoryapp.Views.MainActivity">
 
     <ListView
         android:id="@+id/list"
@@ -20,12 +20,12 @@
         android:textAppearance="?android:textAppearanceMedium" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/plus"
+        android:id="@+id/addItemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/plus_margin"
-        android:src="@android:drawable/ic_menu_add" />
+        android:src="@drawable/ic_add_white_24dp" />
 
 </RelativeLayout>

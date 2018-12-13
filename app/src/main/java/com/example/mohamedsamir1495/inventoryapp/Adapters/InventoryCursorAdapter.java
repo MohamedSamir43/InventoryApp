@@ -14,8 +14,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.mohamedsamir1495.inventoryapp.Database.DBContract.ProductTable;
-import com.example.mohamedsamir1495.inventoryapp.EditorActivity;
-import com.example.mohamedsamir1495.inventoryapp.MainActivity;
+import com.example.mohamedsamir1495.inventoryapp.Views.EditorActivity;
+import com.example.mohamedsamir1495.inventoryapp.Views.MainActivity;
 import com.example.mohamedsamir1495.inventoryapp.R;
 
 
@@ -34,9 +34,6 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(final View view, final Context context, final Cursor cursor) {
-
-
-        Log.d("Position " + cursor.getPosition() + ":", " bindView() has been called.");
 
         TextView productNameTextView = view.findViewById(R.id.name_product_text_view);
         TextView productPriceTextView = view.findViewById(R.id.product_price_text_view);
